@@ -1,3 +1,7 @@
 __pycache__/
 dino_runner/__pycache__/__init__.cpython-310.pyc
-
+dino_runner/__pycache__/__init__.cpython-310.pyc
+dino_runner/components/__pycache__/__init__.cpython-310.pyc
+dino_runner/components/__pycache__/game.cpython-310.pyc
+dino_runner/utils/__pycache__/__init__.cpython-310.pyc
+dino_runner/utils/__pycache__/constants.cpython-310.pyc
