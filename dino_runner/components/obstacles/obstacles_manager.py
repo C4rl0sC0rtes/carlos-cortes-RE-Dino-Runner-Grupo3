@@ -17,17 +17,29 @@ class ObstacleManager:
                 self.obstacles.append(Cactus(SMALL_CACTUS))
         
         for obstacle in self.obstacles:
-            obstacle.update(self.obstacles)
+            obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(125)
-                #game.playing = False
-        
-        for obstacle in self.obstacles:
-            obstacle.update(self.obstacles)
+                pygame.time.delay(100)
+                self.obstacles = []
+                game.player_heart_manager.reduce_heart()
+                #if game.player_heart_manager.reduce_heart() == 0:
+                #   game.score = 0
+                if game.player_heart_manager.heart_count > 0:
+                    #game.player_show = False
+                    pass
+                else:
+                    pygame.time.delay(500)
+                    game.playing = False
+                    game.death_count += 1
+                    break 
+                
 
     def draw(self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)
+
+    def reset_obstacles(self, self1):
+        self.obstacles = []
 
 
 
