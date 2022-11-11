@@ -1,10 +1,10 @@
 import pygame
 import random
 from dino_runner.components.obstacles.cactus import Cactus
+from dino_runner.components.obstacles.bird import Bird
 from dino_runner.utils.constants import (
     SMALL_CACTUS, LARGE_CACTUS, GAME_OVER_SOUND, BIRD)
 from pygame import mixer
-
 pygame.mixer.init()
 
 class ObstacleManager:
@@ -18,15 +18,13 @@ class ObstacleManager:
                 self.obstacles.append(Cactus(LARGE_CACTUS))
             elif cactus_size == 1:
                 self.obstacles.append(Cactus(SMALL_CACTUS))
-            #else:
-                #self.obstacles.append(Cactus(BIRD))
-                #pass
+            else:
+                self.obstacles.append(Bird(BIRD))
         
         for obstacle in self.obstacles:
 
             obstacle.update(game.game_speed, self.obstacles)
 
-            #if game.player.hammer is not None and game.player.hammer.rect.colliderect(obstacle.rect):
             if game.player.hammer is not None and game.player.hammer.rect.colliderect(obstacle.rect):
                 game.player.hammer.kill() #RRRRREvisar error en colision, no elimina martillo
                 self.obstacles.pop()

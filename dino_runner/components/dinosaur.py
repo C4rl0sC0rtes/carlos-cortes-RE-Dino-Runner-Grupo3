@@ -1,9 +1,10 @@
 import pygame
 
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import SOUND_JUMP
+from dino_runner.utils.constants import SOUND_JUMP, HAMMER_SOUND
 from pygame import mixer
 
+pygame.mixer.init()
 
 from dino_runner.utils.constants import (
     DUCKING,
@@ -20,11 +21,6 @@ from dino_runner.utils.constants import (
 
 from dino_runner.components.hammer import Hammer
 
-pygame.mixer.init()
-#pygame.mixer.music.load('jumping.wav')
-SOUND_JUMP = pygame.mixer.Sound('jumping.wav')
-
-
 
 class Dinosaur(Sprite): 
     X_POS = 80
@@ -34,7 +30,6 @@ class Dinosaur(Sprite):
     JUMP_VEL = 8.5
 
     def __init__(self):
-        self.Sound = mixer.music.load('jumping.wav')
         self.duck_img = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE : DUCKING_SHIELD, HAMMER_TYPE : DUCKING_HAMMER}
         self.run_img = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE : RUNNING_SHIELD, HAMMER_TYPE : RUNNING_HAMMER}
         self.jump_img = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE : JUMPING_SHIELD, HAMMER_TYPE : JUMPING_HAMMER}
@@ -51,7 +46,7 @@ class Dinosaur(Sprite):
         self.dino_run = True
         self.dino_duck = False
         self.dino_jump = False
-        self.jump_vel = 8.5
+        self.jump_vel = self.JUMP_VEL
         self.setup_state_booleans()
 
     def setup_state_booleans(self):
@@ -90,6 +85,7 @@ class Dinosaur(Sprite):
             self.step_index = 0
         
         if self.hammer_enabled > 0 and user_input[pygame.K_SPACE]:
+            HAMMER_SOUND.play()
             self.hammer = Hammer(self.dino_rect.x + 100, self.dino_rect.y + 50)
             self.hammer_enabled = max(self.hammer_enabled - 1, 0)
             if self.hammer_enabled == 0:

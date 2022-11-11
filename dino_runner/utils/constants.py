@@ -7,9 +7,10 @@ from pygame import mixer
 
 #Sounds
 pygame.mixer.init()
-SOUND_JUMP = pygame.mixer.Sound('jumping.wav')
-
+#SOUND_JUMP = pygame.mixer.Sound('jump.wav')
+SOUND_JUMP = pygame.mixer.Sound('jump.wav')
 GAME_OVER_SOUND = pygame.mixer.Sound('game_over.wav')
+HAMMER_SOUND = pygame.mixer.Sound('hammer_sound.wav')
 
 # Global Constants
 TITLE = "Chrome Dino Runner"

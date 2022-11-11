@@ -3,6 +3,7 @@ import pygame
 from dino_runner.components import text_utils
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.utils.constants import (
    BG, 
    ICON, 
@@ -11,7 +12,8 @@ from dino_runner.utils.constants import (
    TITLE, FPS, 
    RUNNING, 
    DINO_DEAD,
-   GAME_OVER
+   GAME_OVER,
+   HEART_COUNT
 )
 
 from dino_runner.components.obstacles.obstacles_manager import ObstacleManager
@@ -28,7 +30,7 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
-        self.game_speed = 20
+        self.game_speed = 10
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.player = Dinosaur()
@@ -47,20 +49,19 @@ class Game:
         self.create_components()
         self.playing = True
         while self.playing:
-            
             self.events()
             self.update()
             self.draw()
             self.print_score = self.points
-            self.power_up_manager.update(self.points, self.game_speed, self.player)
-            #self.create_components()
+            if self.death_count == HEART_COUNT: #reinicia los componentes despues de una muerte
+                self.create_components()
     
     def create_components(self):
         self.obstacle_manager.reset_obstacles(self)
-        self.power_up_manager.reset_power_ups(self.points)
+        self.power_up_manager.reset_power_ups()  #Se quito el parametro
         self.player_heart_manager.reset_hearts()
         self.points = 0
-        self.game_speed = 20
+        self.game_speed = 10
 
     def execute(self):
         while self.runnning:
@@ -80,7 +81,7 @@ class Game:
         self.player.update(user_input)
         self.obstacle_manager.update(self)
         self.cloud.update()
-        #self.power_up_manager.update(self.points, self.game_speed, self.player)
+        self.power_up_manager.update(self.points, self.game_speed, self.player)
         
 
 
