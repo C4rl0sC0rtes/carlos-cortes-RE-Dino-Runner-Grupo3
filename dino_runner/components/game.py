@@ -20,7 +20,8 @@ from dino_runner.components.obstacles.obstacles_manager import ObstacleManager
 from dino_runner.components.player_hearts.player_heart_manager import Player_heart_manager
 from dino_runner.components.clouds import Cloud
 
-
+pygame.mixer.music.load('game_music.wav')
+#pygame.mixer.music.play()
 
 class Game:
     def __init__(self):
@@ -39,6 +40,7 @@ class Game:
         self.runnning = True
         self.death_count = 0
         self.print_score = 0
+        self.new_score = 0
         self.power_up_manager = PowerUpManager()
         self.player_heart_manager = Player_heart_manager()
         self.cloud = Cloud()
@@ -62,6 +64,7 @@ class Game:
         self.player_heart_manager.reset_hearts()
         self.points = 0
         self.game_speed = 10
+        pygame.mixer.music.play(10)
 
     def execute(self):
         while self.runnning:
@@ -132,18 +135,26 @@ class Game:
         half_screen_width = SCREEN_WIDTH // 2
 
         if self.death_count == 0:
-            #self.create_components()
             white_color = (255, 255, 255)
             self.screen.fill(white_color)
             text, text_rect = text_utils.get_centred_message('Press any Key to Start')
+            pygame.mixer.music.set_volume(0.2)
+            #if pygame.key.get_pressed() == 1:
+            pygame.mixer.music.play(10)
+            
             self.screen.blit(text, text_rect)
             self.screen.blit(RUNNING[0], (half_screen_width - 20, half_screen_height - 140))
         elif self.death_count > 0:
+            pygame.mixer.music.pause()
             red_color = (239, 21, 21)
             self.screen.fill(red_color)
             text, text_rect = text_utils.get_centred_message('Press any Key to Restart')
             score, score_rect = text_utils.get_centred_message('Your score: '+ str(self.print_score), height=half_screen_height + 50)
-            death, death_rect = text_utils.get_centred_message('Death count: '+ str(self.death_count), height=half_screen_height + 100)
+            death, death_rect = text_utils.get_centred_message('Death count: '+ str(self.death_count), height=half_screen_height + 150)
+            if self.print_score > self.new_score:
+                self.new_score = self.print_score
+            best, best_score = text_utils.get_centred_message('Best score: '+ str(self.new_score), height=half_screen_height + 100)
+            self.screen.blit(best, best_score)
             self.screen.blit(score, score_rect)
             self.screen.blit(text, text_rect)
             self.screen.blit(death, death_rect)

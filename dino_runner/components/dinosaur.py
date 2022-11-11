@@ -16,7 +16,9 @@ from dino_runner.utils.constants import (
     DUCKING_HAMMER,
     RUNNING_HAMMER,
     JUMPING_HAMMER,
-    DEFAULT_TYPE, SHIELD_TYPE, HAMMER_TYPE
+    DEFAULT_TYPE, 
+    SHIELD_TYPE, 
+    HAMMER_TYPE
 )
 
 from dino_runner.components.hammer import Hammer
@@ -85,11 +87,13 @@ class Dinosaur(Sprite):
             self.step_index = 0
         
         if self.hammer_enabled > 0 and user_input[pygame.K_SPACE]:
-            HAMMER_SOUND.play()
+            HAMMER_SOUND.play()    #Sonido martillo
             self.hammer = Hammer(self.dino_rect.x + 100, self.dino_rect.y + 50)
-            self.hammer_enabled = max(self.hammer_enabled - 1, 0)
-            if self.hammer_enabled == 0:
+
+            self.hammer_enabled = max(self.hammer_enabled - 1, 0) 
+            if self.hammer_enabled > 0:  #Condicion para eliminar el martillo
                 self.update_to_default(HAMMER_TYPE)
+                self.hammer_enabled = 0
 
         if self.hammer:
             self.hammer.update()

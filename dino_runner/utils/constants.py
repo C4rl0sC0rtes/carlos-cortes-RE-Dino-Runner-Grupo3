@@ -11,6 +11,9 @@ pygame.mixer.init()
 SOUND_JUMP = pygame.mixer.Sound('jump.wav')
 GAME_OVER_SOUND = pygame.mixer.Sound('game_over.wav')
 HAMMER_SOUND = pygame.mixer.Sound('hammer_sound.wav')
+HIT = pygame.mixer.Sound('hit.wav')
+POWERUP_SOUND = pygame.mixer.Sound('powerup.wav')
+COLLISION = pygame.mixer.Sound('collision.wav')
 
 # Global Constants
 TITLE = "Chrome Dino Runner"
@@ -95,5 +98,5 @@ DEFAULT_TYPE = "default"
 SHIELD_TYPE = "Shield"
 HAMMER_TYPE = "Hammer"
 
-HEART_COUNT = 6
+HEART_COUNT = 4
 
