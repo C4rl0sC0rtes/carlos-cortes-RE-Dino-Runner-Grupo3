@@ -1,6 +1,5 @@
 from dino_runner.components.player_hearts.heart import Heart
 from dino_runner.utils.constants import HEART_COUNT
-#from dino_runner.components.game import Game
 
 class Player_heart_manager:
     def __init__(self):

@@ -2,7 +2,10 @@ import pygame
 import random
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.utils.constants import (
-    SMALL_CACTUS, LARGE_CACTUS)
+    SMALL_CACTUS, LARGE_CACTUS, GAME_OVER_SOUND, BIRD)
+from pygame import mixer
+
+pygame.mixer.init()
 
 class ObstacleManager:
     def __init__(self):
@@ -10,28 +13,45 @@ class ObstacleManager:
 
     def update(self, game):
         if len(self.obstacles) == 0:
-            cactus_size = random.randint(0, 1)
+            cactus_size = random.randint(0, 2)
             if cactus_size == 0:
                 self.obstacles.append(Cactus(LARGE_CACTUS))
-            else:
+            elif cactus_size == 1:
                 self.obstacles.append(Cactus(SMALL_CACTUS))
+            #else:
+                #self.obstacles.append(Cactus(BIRD))
+                #pass
         
         for obstacle in self.obstacles:
+
             obstacle.update(game.game_speed, self.obstacles)
+
+            #if game.player.hammer is not None and game.player.hammer.rect.colliderect(obstacle.rect):
+            if game.player.hammer is not None and game.player.hammer.rect.colliderect(obstacle.rect):
+                game.player.hammer.kill() #RRRRREvisar error en colision, no elimina martillo
+                self.obstacles.pop()
+            else:
+                obstacle.update(game.game_speed, self.obstacles)
+
+
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(100)
-                self.obstacles = []
-                game.player_heart_manager.reduce_heart()
-                #if game.player_heart_manager.reduce_heart() == 0:
-                #   game.score = 0
-                if game.player_heart_manager.heart_count > 0:
-                    #game.player_show = False
-                    pass
+                if not game.player.shield:
+
+                    game.player_heart_manager.reduce_heart()
+                    if game.player_heart_manager.heart_count > 0:
+                        game.player.shield = True
+                        game.player.show_text = False
+                        start_time = pygame.time.get_ticks()
+                        game.player.shield_time_up = start_time + 1000
+                    else:
+                        pygame.time.delay(500)
+                        game.playing = False
+                        game.death_count += 1
+                        if game.player_heart_manager.heart_count == 0:
+                            GAME_OVER_SOUND.play()
+                        break 
                 else:
-                    pygame.time.delay(500)
-                    game.playing = False
-                    game.death_count += 1
-                    break 
+                    self.obstacles.remove(obstacle)
                 
 
     def draw(self, screen):
